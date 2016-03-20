@@ -9,8 +9,11 @@ var CHANGE_EVENT = 'change';
 var _contacts = [];
 
 var AppStore = assign({}, EventEmitter.prototype, {
-    saveContact: function() {
+    saveContact: function(contact) {
          _contacts.push(contact);
+    },
+    setContacts: function(contacts) {
+          _contacts = contacts;
     },
     getContacts: function(contact) {
          return _contacts; 
@@ -34,10 +37,19 @@ AppDispatcher.register(function(payload){
             console.log("Saving Contact..")
             //Store Save
             AppStore.saveContact(action.contact);
+            //Save to API (Firebase)
+            AppAPI.saveContact(action.contact);
             //Emit change
             AppStore.emit(CHANGE_EVENT);
             break;
-		
+        case AppConstants.RECEIVE_CONTACTS:
+            console.log("Receiving Contacts..")
+            //Store Save
+            AppStore.setContacts(action.contacts);
+            
+            //Emit change
+            AppStore.emit(CHANGE_EVENT);
+            break;
 	}
 
 	return true;
