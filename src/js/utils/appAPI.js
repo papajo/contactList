@@ -27,5 +27,15 @@ module.exports = {
     removeContact: function(contactId) {
         this.firebaseRef = new Firebase('https://contact-list-reactjs.firebaseio.com/contacts/'+contactId);
         this.firebaseRef.remove();
+    },
+    updateContact: function(contact) {
+        var id = contact.id;
+        var updatedContact = {
+            name: contact.name,
+            phone: contact.phone,
+            email: contact.email
+        }
+        this.firebaseRef = new Firebase('https://contact-list-reactjs.firebaseio.com/contacts/'+contact.id+'/contact');
+        this.firebaseRef.update(updatedContact);
     }
 }
